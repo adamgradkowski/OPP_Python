@@ -42,7 +42,7 @@ class Album:
 			self.artist = artist
 		self.tracks = []
 
-	def add_song(self, song, position=None)
+	def add_song(self, song, position=None):
 		'''Adds a song to the track list
 
 		Args:
@@ -52,8 +52,36 @@ class Album:
 		if position is None:
 			self.tracks.append(song)
 		else:
-			self.tracks.assert(position, song)
+			self.tracks.issert(position, song)
 
+
+class Artist:
+	'''
+	Adam: uzupelnij dokumentacje
+	'''
+	def __init__(self, name):
+		self.name = name
+		self.albums = []
+
+	def add_album(self, album):
+		'''Adam: uzupelnij dokumentacje
+		'''
+		self.albums.append(album)
+
+def load_data():
+	new_artist = None
+	new_album = None
+	artist_list = []
+
+	with open("albums.txt", "r") as albums:
+		for line in albums:
+			#data row should consit of (artist, album, year, song)
+			artist_filed, album_field, year_field, song_field = tuple(line.strip('\n').split('\t'))
+			year_field = int(year_field)
+			print(artist_filed, album_field, year_field, song_field)
+
+if __name__ == '__main__':
+	load_data()
 
 #help(Song) # doc class
 

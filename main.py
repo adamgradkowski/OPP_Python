@@ -1,25 +1,5 @@
-from player import Player
+from enemy import Enemy, Troll
 
-tim = Player("adam")
+random_monster = Enemy("En", 12, 1)
 
-print(tim)
-tim.lives -=1
-
-print(tim)
-tim.lives -=1
-print(tim)
-tim.lives -=1
-print(tim)
-tim.lives -=1
-print(tim)
-tim.lives -=1
-
-print(tim)
-tim.level -=1
-
-print(tim)
-tim.level = 5
-
-print(tim)
-tim.level -=1
-print(tim)
+ugly_troll = Troll

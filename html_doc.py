@@ -8,8 +8,8 @@ class Tag(object):
 	def __str__(self):
 		return "{0.start_tag}{0.contents}{0.end_tag}".format(self)
 
-	def display(self):
-		print(self)
+	def display(self, file=None):
+		print(self, file=file)
 
 class DocType(Tag):
 
@@ -32,10 +32,33 @@ class Body(Tag):
 		new_tag = Tag(name, contents)
 		self._body_contents.append(new_tag)
 
-	def display(self):
+	def display(self, file=None):
 		for tag in self._body_contents:
 			self.contents += str(tag)
 
-		super().display()
+		super().display(file=file)
+
+class HtmlDoc(object):
+
+	def __init__(self):
+		self._doc_type = DocType()
+		self._head = Head()
+		self._body = Body()
+
+	def add_tag(self, name, contents):
+		self._body.add_tag(name, contents)
+
+	def display(self, file=None):
+		self._doc_type.display(file=file)
+		print('<html>', file=file)
+		self._head.display(file=file)
+		self._body.display(file=file)
+		print('</html>', file=file)
 
 
+if __name__ == '__main__':
+	my_page = HtmlDoc()
+	my_page.add_tag('h1', 'Main heading')
+	my_page.add_tag('h2', 'sub-heading')
+	my_page.add_tag('p', 'This is a paragrph that will appear on the page')
+	my_page.display()

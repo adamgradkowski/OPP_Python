@@ -43,10 +43,10 @@ class Body(Tag):
 
 class HtmlDoc(object):
 
-	def __init__(self, title=None):
-		self._doc_type = DocType()
-		self._head = Head(title)
-		self._body = Body()
+	def __init__(self, doc_type, head, body):
+		self._doc_type = doc_type
+		self._head = head
+		self._body = body
 
 	def add_tag(self, name, contents):
 		self._body.add_tag(name, contents)
@@ -60,9 +60,21 @@ class HtmlDoc(object):
 
 
 if __name__ == '__main__':
-	my_page = HtmlDoc('Title')
-	my_page.add_tag('h1', 'Main heading')
-	my_page.add_tag('h2', 'sub-heading')
-	my_page.add_tag('p', 'This is a paragrph that will appear on the page')
-	with open('test.html', 'w') as test_doc:
-		my_page.display(file=test_doc)
+	#my_page = HtmlDoc('Title')
+	#my_page.add_tag('h1', 'Main heading')
+	#my_page.add_tag('h2', 'sub-heading')
+	#my_page.add_tag('p', 'This is a paragrph that will appear on the page')
+	#with open('test.html', 'w') as test_doc:
+	#	my_page.display(file=test_doc)
+	new_body = Body()
+	new_body.add_tag('h1', 'Agggregat')
+	new_body.add_tag('p', 'saldhsadhsad')
+	new_body.add_tag('p', "<dasdsadas <strong> Composition </strong>")
+	new_body.add_tag('p', "<dasdsadas <strong> Composition </strong>")
+
+	new_docType = DocType()
+	new_header = Head('Aggregat title')
+	my_page = HtmlDoc(new_docType, new_header, new_body)
+
+	with open('test3.html', 'w') as test_doc3:
+		my_page.display(file=test_doc3)

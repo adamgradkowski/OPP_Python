@@ -78,6 +78,7 @@ class Body(Tag):
 		new_tag = Tag(name, contents)
 		self._body_contents.append(new_tag)
 
+
 	def display(self, file=None):
 		'''
 		dziedziczy metode display() po Tag'u, ponadto do atrybuty content dodawany sa zawartosc wszystkich Tag'ow z tablicy body_content
@@ -120,6 +121,26 @@ class HtmlDoc(object):
 		self._body.display(file=file)
 		print('</html>', file=file)
 
+class Div(Tag):
+
+	def __init__(self, cont = None):
+		super().__init__('div','')
+		self._div_contents = []
+		if cont:
+			self.contents = cont
+
+	def add_tag(self,name,contents):
+		new_tag = Tag(name,contents)
+		self._div_contents.append(new_tag)
+		for tag in self._div_contents:
+			self.contents +=str(tag)
+
+	def display(self, file=None):
+		for tag in self._div_contents:
+			self.contents += str(tag)
+		super().display(file=file)
+
+
 
 if __name__ == '__main__':
 	new_body = Body()
@@ -134,4 +155,9 @@ if __name__ == '__main__':
 
 	with open('test3.html', 'w') as test_doc3:
 		my_page.display(file=test_doc3)
+
+	div = Div("cont")
+	print(div)
+	div.add_tag('p','cont2')
+	print(div)
 

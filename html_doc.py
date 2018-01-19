@@ -7,7 +7,7 @@ class Tag(object):
 		content (str): zawartosc pomiedzy poczatkiem i koncem znacznika
 	'''
 
-	def __init__(self, name, contents):
+	def __init__(self, name, contents = ''):
 		'''Tag init method
 
 		Args:
@@ -17,18 +17,83 @@ class Tag(object):
 		self.start_tag = '<{}>'.format(name)
 		self.end_tag = '</{}>'.format(name)
 		self.contents = contents
+		self.elem_content = []
+		self.hierarhy = 0
 
+
+	def add_elem(self, elem):
+
+		self.elem_content.append(elem)
+
+ 
+	'''
 	def __str__(self):
-		''' metoda __str__ zwraca wszystkie atrybuty Tag'a
-		'''
+		 metoda __str__ zwraca wszystkie atrybuty Tag'a
+		
 
 		return "{0.start_tag}{0.contents}{0.end_tag}".format(self)
-
+	'''
 	def display(self, file=None):
 		''' wyswietla obiekt - siebie
 		'''
+		con = self.contents
+		self.contents = ''
+		print(self.start_tag)
+		self.contents += self.start_tag #h1
+		self.contents += '\n'
+		self.contents += '\t'
+		self.contents += con
+		if self.elem_content:
+			for elem in self.elem_content: #h2 #h5
+				self.contents += '\n'
+				self.contents += '\t'
+				self.contents += elem.start_tag
+				self.contents += '\n'
+				self.contents += '\t\t'
+				self.contents += elem.contents
+				print(elem.start_tag + elem.end_tag)
+				if elem.elem_content:
+					self.contents += '\n'
+					for ele in elem.elem_content: #h3
+						self.contents += '\t\t'
+						self.contents += ele.start_tag
+						self.contents += '\n'
+						self.contents += '\t\t\t'
+						self.contents += ele.contents
+						print(ele.start_tag + ele.end_tag)
+						if ele.elem_content:
+							self.contents += '\n'
+							for el in ele.elem_content: #h4
+								self.contents += '\t\t\t'
+								self.contents += el.start_tag
+								self.contents += '\n'
+								self.contents += '\t\t\t\t'
+								self.contents += el.contents
+								self.contents += '\n'
+								self.contents += '\t\t\t'
+								self.contents += el.end_tag
+								print(el.start_tag + el.end_tag)
+						else:
+							print("nie ma")
+						self.contents += '\n'
+						self.contents += '\t\t'
+						self.contents += ele.end_tag
 
-		print(self, file=file)
+				else:
+					print("nie ma")
+				self.contents += '\n'
+				self.contents += '\t'
+				self.contents += elem.end_tag
+		else:
+			print("nie ma")
+		print(self.start_tag)
+		self.contents += '\n'
+		self.contents += self.end_tag
+		print("="*80)
+		print(self.contents)
+		#print(self, file=file)
+
+	
 
 class DocType(Tag):
 
@@ -66,7 +131,7 @@ class Body(Tag):
 		super().__init__('body', '')
 		self._body_contents = []
 
-	def add_tag(self, name, contents):
+	def add_tag(self, elem):
 		''' Dodawanie nowego tagu do tablicy , tworzony jest nowy tag
 
 		Args:
@@ -74,9 +139,7 @@ class Body(Tag):
 			content (str): zawartosc tagu
 		
 		'''
-
-		new_tag = Tag(name, contents)
-		self._body_contents.append(new_tag)
+		self.elem_content.append(elem)
 
 
 	def display(self, file=None):
@@ -84,8 +147,8 @@ class Body(Tag):
 		dziedziczy metode display() po Tag'u, ponadto do atrybuty content dodawany sa zawartosc wszystkich Tag'ow z tablicy body_content
 		'''
 
-		for tag in self._body_contents:
-			self.contents += str(tag)
+		#for tag in self._body_contents:
+		#	self.contents += str(tag)
 
 		super().display(file=file)
 
@@ -143,6 +206,7 @@ class Div(Tag):
 
 
 if __name__ == '__main__':
+	'''
 	new_body = Body()
 	new_body.add_tag('h1', 'Agggregat')
 	new_body.add_tag('p', 'saldhsadhsad')
@@ -155,9 +219,27 @@ if __name__ == '__main__':
 
 	with open('test3.html', 'w') as test_doc3:
 		my_page.display(file=test_doc3)
+	'''
+	'''
+	tag = Tag('p', 'zawartosc')
+	tag2 = Tag('h1', 'zawartosc2')
+	tag3 = Tag('h2', 'zawartosc3')
+	tag2.add_elem(tag3)
+	body = Body()
+	body.add_tag(tag)
+	body.add_tag(tag2)
+	body.display()
+	'''
+	h1 = Tag('h1','h1 naglowek')
+	h2 = Tag('h2','h2 naglowek')
+	h3 = Tag('h3','h3 naglowek')
+	h4 = Tag('h4','h4 naglowek')
+	h5 = Tag('h5','h5 naglowek')
+	h3.add_elem(h4)
+	h2.add_elem(h3)
+	h1.add_elem(h2)
+	h1.add_elem(h5)
 
-	div = Div("cont")
-	print(div)
-	div.add_tag('p','cont2')
-	print(div)
+	h1.display()
+	
 

@@ -53,8 +53,8 @@ class Tag(object):
 				self.contents += elem.contents
 				print(elem.start_tag + elem.end_tag)
 				if elem.elem_content:
-					self.contents += '\n'
 					for ele in elem.elem_content: #h3
+						self.contents += '\n'
 						self.contents += '\t\t'
 						self.contents += ele.start_tag
 						self.contents += '\n'
@@ -235,8 +235,19 @@ if __name__ == '__main__':
 	h3 = Tag('h3','h3 naglowek')
 	h4 = Tag('h4','h4 naglowek')
 	h5 = Tag('h5','h5 naglowek')
+	h6 = Tag('h6','h6 naglowek')
+	h7 = Tag('h7','h5 naglowek')
+	h8 = Tag('h8','h5 naglowek')
+	h9 = Tag('h9','h5 naglowek')
+	h10 = Tag('h10','h5 naglowek')
+	h11 = Tag('h11','h5 naglowek')
+	h12 = Tag('h12','h5 naglowek')
+	h13 = Tag('h13','h5 naglowek')
+	h14 = Tag('h14','h5 naglowek')
 	h3.add_elem(h4)
+	h2.add_elem(h6)
 	h2.add_elem(h3)
+	#h2.add_elem(h7)
 	h1.add_elem(h2)
 	h1.add_elem(h5)
 

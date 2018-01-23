@@ -7,14 +7,21 @@ class Tag(object):
 		content (str): zawartosc pomiedzy poczatkiem i koncem znacznika
 	'''
 
-	def __init__(self, name, contents = ''):
+	def __init__(self, name, contents = '', id_tag = None, class_tag = None):
 		'''Tag init method
 
 		Args:
 			name (str): nazwa znacznika 
 			content (str): wybrana zawartosc znacznika
 		'''
-		self.start_tag = '<{}>'.format(name)
+		if id_tag and class_tag:
+			self.start_tag = '<{} id="{}" class="{}">'.format(name, id_tag, class_tag)
+		elif class_tag:
+			self.start_tag = '<{} class="{}">'.format(name, class_tag)
+		elif id_tag:
+			 self.start_tag = '<{} id="{}">'.format(name, id_tag)
+		else:
+			self.start_tag = '<{}>'.format(name)
 		self.end_tag = '</{}>'.format(name)
 		self.contents = contents
 		self.elem_content = []
@@ -26,23 +33,17 @@ class Tag(object):
 		self.elem_content.append(elem)
 
  
-	'''
+	
 	def __str__(self):
-		 metoda __str__ zwraca wszystkie atrybuty Tag'a
-		
+		''' metoda __str__ zwraca wszystkie atrybuty Tag'a
+		'''
 
 		return "{0.start_tag}{0.contents}{0.end_tag}".format(self)
-	'''
+	
 	def display(self, file=None):
 		''' wyswietla obiekt - siebie
 		'''
-		con = self.contents
-		self.contents = ''
-		print(self.start_tag)
-		self.contents += self.start_tag #h1
-		self.contents += '\n'
-		self.contents += '\t'
-		self.contents += con
+		
 		if self.elem_content:
 			for elem in self.elem_content: #h2 #h5
 				self.contents += '\n'
@@ -51,7 +52,6 @@ class Tag(object):
 				self.contents += '\n'
 				self.contents += '\t\t'
 				self.contents += elem.contents
-				print(elem.start_tag + elem.end_tag)
 				if elem.elem_content:
 					for ele in elem.elem_content: #h3
 						self.contents += '\n'
@@ -60,10 +60,9 @@ class Tag(object):
 						self.contents += '\n'
 						self.contents += '\t\t\t'
 						self.contents += ele.contents
-						print(ele.start_tag + ele.end_tag)
 						if ele.elem_content:
-							self.contents += '\n'
 							for el in ele.elem_content: #h4
+								self.contents += '\n'
 								self.contents += '\t\t\t'
 								self.contents += el.start_tag
 								self.contents += '\n'
@@ -72,26 +71,17 @@ class Tag(object):
 								self.contents += '\n'
 								self.contents += '\t\t\t'
 								self.contents += el.end_tag
-								print(el.start_tag + el.end_tag)
-						else:
-							print("nie ma")
 						self.contents += '\n'
 						self.contents += '\t\t'
 						self.contents += ele.end_tag
 
-				else:
-					print("nie ma")
 				self.contents += '\n'
 				self.contents += '\t'
 				self.contents += elem.end_tag
-		else:
-			print("nie ma")
-		print(self.start_tag)
+
 		self.contents += '\n'
-		self.contents += self.end_tag
-		print("="*80)
-		print(self.contents)
-		#print(self, file=file)
+		#self.contents += self.end_tag
+		print(self, file=file)
 
 	
 
@@ -108,6 +98,26 @@ class Head(Tag):
 		if title:
 			self._title_tag = Tag('title', title)
 			self.contents = str(self._title_tag)
+
+	def add_style(self, name):
+		style = '<link rel="stylesheet" href=' + name + '">'
+		self.contents += style
+		print(style)
+
+class Style(object):
+
+	def __init__(self, name):
+		self.name = name
+		self.content = []
+
+	def __str__(self):
+		return "{0.name}".format(self)
+
+	def add_elem(self, name):
+		content.append(name) 
+
+
+
 
 class Body(Tag):
 	'''Klasa Body reprezentujaca reprezentujaca cala czesc 'fizyczna' pliku html
@@ -221,36 +231,58 @@ if __name__ == '__main__':
 		my_page.display(file=test_doc3)
 	'''
 	'''
-	tag = Tag('p', 'zawartosc')
-	tag2 = Tag('h1', 'zawartosc2')
-	tag3 = Tag('h2', 'zawartosc3')
-	tag2.add_elem(tag3)
 	body = Body()
-	body.add_tag(tag)
-	body.add_tag(tag2)
+	new_docType = DocType()
+	new_header = Head('Aggregat title')
+	my_page = HtmlDoc(new_docType, new_header, body)
+
+	div1 = Tag('div','div')
+	h1 = Tag('h1','glowny naglowek')
+	div11 = Tag('div','div')
+	p1 = Tag('p', 'Tekst')
+	p2 = Tag('p', 'Tekst')
+	div11.add_elem(p1)
+	div11.add_elem(p2)
+	div1.add_elem(h1)
+	div1.add_elem(div11)
+
+	div2 = Tag('div','div')
+	h2 = Tag('h2','glowny naglowek')
+	div22 = Tag('div','div')
+	p3 = Tag('p', 'Tekst')
+	p4 = Tag('p', 'Tekst')
+	div22.add_elem(p3)
+	div22.add_elem(p4)
+	div2.add_elem(h2)
+	div2.add_elem(div22)
+
+	div3 = Tag('div','div')
+	h3 = Tag('h3','glowny naglowek')
+	div33 = Tag('div','div')
+	p5 = Tag('p', 'Tekst')
+	p6 = Tag('p', 'Tekst')
+	div33.add_elem(p5)
+	div33.add_elem(p6)
+	div3.add_elem(h3)
+	div3.add_elem(div33)
+
+
+	body.add_tag(div1)
+	body.add_tag(div2)
+	body.add_tag(div3)
 	body.display()
+
+	with open('index.html', 'w') as test_doc3:
+		my_page.display(file=test_doc3)
 	'''
-	h1 = Tag('h1','h1 naglowek')
-	h2 = Tag('h2','h2 naglowek')
-	h3 = Tag('h3','h3 naglowek')
-	h4 = Tag('h4','h4 naglowek')
-	h5 = Tag('h5','h5 naglowek')
-	h6 = Tag('h6','h6 naglowek')
-	h7 = Tag('h7','h5 naglowek')
-	h8 = Tag('h8','h5 naglowek')
-	h9 = Tag('h9','h5 naglowek')
-	h10 = Tag('h10','h5 naglowek')
-	h11 = Tag('h11','h5 naglowek')
-	h12 = Tag('h12','h5 naglowek')
-	h13 = Tag('h13','h5 naglowek')
-	h14 = Tag('h14','h5 naglowek')
-	h3.add_elem(h4)
-	h2.add_elem(h6)
-	h2.add_elem(h3)
-	#h2.add_elem(h7)
-	h1.add_elem(h2)
-	h1.add_elem(h5)
+	div = Tag('div', 'zawartosc', class_tag='class_tag')
+	#div.display()
 
-	h1.display()
-	
-
+	body = Body()
+	new_docType = DocType()
+	new_header = Head('Aggregat title')
+	#new_header.add_style('mystyle.css')
+	my_page = HtmlDoc(new_docType, new_header, body)
+	#my_page.display()
+	style = Style('mystyle.css')
+	print(style)

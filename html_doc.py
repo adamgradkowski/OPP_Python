@@ -22,15 +22,19 @@ class Tag(object):
 			 self.start_tag = '<{} id="{}">'.format(name, id_tag)
 		else:
 			self.start_tag = '<{}>'.format(name)
+
 		self.end_tag = '</{}>'.format(name)
 		self.contents = contents
 		self.elem_content = []
-		self.hierarhy = 0
-
+		self.tag_style = {}
 
 	def add_elem(self, elem):
 
 		self.elem_content.append(elem)
+
+	def add_style(self, name, value):
+		self.tag_style.update({name:value})
+		print(self.tag_style)
 
  
 	
@@ -108,13 +112,26 @@ class Style(object):
 
 	def __init__(self, name):
 		self.name = name
-		self.content = []
+		self.elements = []
+		self.content = ''
 
-	def __str__(self):
-		return "{0.name}".format(self)
+	#def __str__(self):
+	#	return "{0.name}".format(self)
 
 	def add_elem(self, name):
-		content.append(name) 
+		self.elements.append(name)
+
+	def display(self, file=None):
+		for element in self.elements:
+			if Tag.id_tag:
+				print("jest tag")
+
+			#el = str(element) + ' {\n}\n'
+			#self.content += el 
+
+		#print(self.content)
+		#print(self.content, file=file)
+
 
 
 
@@ -275,8 +292,9 @@ if __name__ == '__main__':
 	with open('index.html', 'w') as test_doc3:
 		my_page.display(file=test_doc3)
 	'''
-	div = Tag('div', 'zawartosc', class_tag='class_tag')
-	#div.display()
+	div = Tag('div', 'zawartosc', id_tag='id_tag', class_tag='class_tag')
+	div.add_style('font','normal')
+	div.display()
 
 	body = Body()
 	new_docType = DocType()
@@ -285,4 +303,10 @@ if __name__ == '__main__':
 	my_page = HtmlDoc(new_docType, new_header, body)
 	#my_page.display()
 	style = Style('mystyle.css')
-	print(style)
+	style.add_elem(div)
+	#style.add_elem('h1')
+	style.display()
+
+	#with open('mystyle.css', 'w') as style_:
+	#	style.display(file=style_)
+	

@@ -1,5 +1,9 @@
-body {
+#id_tag.class_tag {
+font : normal;
+background : unnormal;
 }
-h1 {
+#id_tag2 {
+font : black;
+background : green;
 }
 

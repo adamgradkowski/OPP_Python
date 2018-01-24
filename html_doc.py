@@ -23,6 +23,8 @@ class Tag(object):
 		else:
 			self.start_tag = '<{}>'.format(name)
 
+		self.id = id_tag
+		self.clas = class_tag
 		self.end_tag = '</{}>'.format(name)
 		self.contents = contents
 		self.elem_content = []
@@ -34,7 +36,8 @@ class Tag(object):
 
 	def add_style(self, name, value):
 		self.tag_style.update({name:value})
-		print(self.tag_style)
+
+	
 
  
 	
@@ -122,15 +125,33 @@ class Style(object):
 		self.elements.append(name)
 
 	def display(self, file=None):
+		print(self.content)
 		for element in self.elements:
-			if Tag.id_tag:
-				print("jest tag")
-
+			if type(element) is Tag:
+				print(element)
+				if element.id is not None and element.clas is not None:
+					self.content = self.content + '#' + element.id + '.' + element.clas + ' {' + '\n'
+					for keys,values in element.tag_style.items():
+						self.content = self.content + keys + ' : ' + values +';' + '\n'
+					self.content += '}'
+				elif element.clas is not None:
+					self.content = self.content + '.' + element.clas + ' {' + '\n'
+					for keys,values in element.tag_style.items():
+						self.content = self.content + keys + ' : ' + values +';' + '\n'
+					self.content += '}'
+				elif element.id is not None:
+					self.content = self.content + '#' + element.id + ' {' + '\n'
+					for keys,values in element.tag_style.items():
+						self.content = self.content + keys + ' : ' + values  +';' + '\n'
+					self.content += '}'
+			self.content += '\n'
+					#print('#'+element.id + '{' + '\n' + str(element.tag_style) + '}')
+		#print(content)
 			#el = str(element) + ' {\n}\n'
 			#self.content += el 
 
-		#print(self.content)
-		#print(self.content, file=file)
+		print(self.content)
+		print(self.content, file=file)
 
 
 
@@ -294,8 +315,13 @@ if __name__ == '__main__':
 	'''
 	div = Tag('div', 'zawartosc', id_tag='id_tag', class_tag='class_tag')
 	div.add_style('font','normal')
-	div.display()
+	div.add_style('background','unnormal')
+	#div.display()
 
+	div2 = Tag('div', 'nowosc', id_tag='id_tag2')
+	div2.add_style('font','black')
+	div2.add_style('background','green')
+	
 	body = Body()
 	new_docType = DocType()
 	new_header = Head('Aggregat title')
@@ -304,9 +330,10 @@ if __name__ == '__main__':
 	#my_page.display()
 	style = Style('mystyle.css')
 	style.add_elem(div)
+	style.add_elem(div2)
 	#style.add_elem('h1')
-	style.display()
+	#style.display()
 
-	#with open('mystyle.css', 'w') as style_:
-	#	style.display(file=style_)
+	with open('mystyle.css', 'w') as style_:
+		style.display(file=style_)
 	
